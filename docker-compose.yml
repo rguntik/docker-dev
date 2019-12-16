@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  apache:
+    image: httpd:2.4
+    volumes:
+      - ${VOLUME_DIR}:/var/www/html
+      - ./httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    depends_on:
+      - php
+
+  nginx:
+    image: nginx:1.13
+    ports:
+      - 80:80
+    volumes:
+      - ${VOLUME_DIR}:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - apache
+
+  php:
+    build:
+      context: ./images/php
+    volumes:
+      - ${VOLUME_DIR}:/var/www/html
+    user: ${CURRENT_UID}

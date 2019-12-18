@@ -25,3 +25,17 @@ services:
     volumes:
       - ${VOLUME_DIR}:/var/www/html
     user: ${CURRENT_UID}
+
+  rg_mysql:
+    image: mysql:5.7
+    ports:
+      - 3307:3306
+    depends_on:
+      - php
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql

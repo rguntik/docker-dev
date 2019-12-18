@@ -39,3 +39,14 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ./data/mysql:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+    restart: always
+    links:
+      - rg_mysql:mysql_db_server
+    ports:
+      - 8080:80

@@ -8,6 +8,8 @@ services:
       - ./httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
     depends_on:
       - php
+    networks:
+      - static-network
 
   nginx:
     image: nginx:1.13
@@ -18,6 +20,8 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - apache
+    networks:
+      - static-network
 
   php:
     build:
@@ -25,11 +29,13 @@ services:
     volumes:
       - ${VOLUME_DIR}:/var/www/html
     user: ${CURRENT_UID}
+    networks:
+      - static-network
 
   rg_mysql:
     image: mysql:5.7
     ports:
-      - 3307:3306
+      - 3347:3306
     depends_on:
       - php
     environment:
@@ -39,6 +45,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ./data/mysql:/var/lib/mysql
+    networks:
+      - static-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -50,3 +58,11 @@ services:
       - rg_mysql:mysql_db_server
     ports:
       - 8080:80
+    networks:
+      - static-network
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.123.0.0/16

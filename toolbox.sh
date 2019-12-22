@@ -18,7 +18,6 @@ function build() {
     cat "$NGINX_FILE.template" > $NGINX_FILE
 
     cat /etc/hosts | grep -v $HOST_IP >"$HOME_DIR/hosts"
-    echo "$HOST_IP dev.loc:8080" >>"$HOME_DIR/hosts"
     echo "$HOST_IP dev.loc" >>"$HOME_DIR/hosts"
 
     for dir in $(ls -d */ | cut -f1 -d'/'); do
@@ -33,6 +32,7 @@ function build() {
     echo "}" >> $NGINX_FILE
 
     cat "$HOME_DIR/hosts" | sudo tee /etc/hosts
+    echo "$HOST_IP dev.loc:8080" >>"$HOME_DIR/hosts"
     echo "<?php echo '" >"$VOLUME_DIR/index.php"
     cat "$HOME_DIR/hosts" | grep $HOST_IP | awk '{print "http://" $2 "<br>"}' >>"$VOLUME_DIR/index.php"
     echo "';" >>"$VOLUME_DIR/index.php"

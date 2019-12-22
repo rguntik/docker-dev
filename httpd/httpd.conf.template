@@ -97,7 +97,7 @@ DocumentRoot "/var/www/html"
 </IfModule>
 
 <VirtualHost *:80>
-  ServerName localhost
+  ServerName dev.loc
   DocumentRoot "/var/www/html"
 </VirtualHost>
 

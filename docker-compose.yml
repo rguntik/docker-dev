@@ -1,4 +1,4 @@
-version: '3'
+version: "3.4"
 
 services:
   apache:
@@ -24,8 +24,11 @@ services:
       - static-network
 
   php:
+    container_name: home_dev_php
     build:
-      context: ./images/php
+      context: ./images/php/${ENV_PHP_V}
+      args:
+        environment: development
     volumes:
       - ${VOLUME_DIR}:/var/www/html
     user: ${CURRENT_UID}

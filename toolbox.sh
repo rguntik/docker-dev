@@ -9,6 +9,9 @@ export HOST_IP="172.123.0.1"
 cd $(dirname $0)
 export CURRENT_UID=$(id -u):$(id -g)
 
+# Export the vars in .env into your shell:
+export $(egrep -v '^#' .env | xargs)
+
 function build() {
     cd $VOLUME_DIR
     HTTPD_FILE="$HOME_DIR/httpd/httpd.conf"
@@ -33,11 +36,10 @@ function build() {
 
     cat "$HOME_DIR/hosts" | sudo tee /etc/hosts
     echo "$HOST_IP dev.loc:8080" >>"$HOME_DIR/hosts"
-    echo "<?php echo '" >"$VOLUME_DIR/index.php"
-    cat "$HOME_DIR/hosts" | grep $HOST_IP | awk '{print "http://" $2 "<br>"}' >>"$VOLUME_DIR/index.php"
-    echo "';" >>"$VOLUME_DIR/index.php"
+    cat "$HOME_DIR/hosts" | grep $HOST_IP | awk '{print "http://" $2}' >"$VOLUME_DIR/hostList.txt"
     rm "$HOME_DIR/hosts"
-
+    rm "$VOLUME_DIR/index.php"
+    cp "$HOME_DIR/index.php" "$VOLUME_DIR/index.php"
 }
 
 function docker_up() {
@@ -48,6 +50,14 @@ function docker_up() {
 
 function docker_shutdown() {
     docker-compose -f docker-compose.yml down $@
+}
+
+function docker_compose() {
+    docker-compose $@
+}
+
+function ssh() {
+    docker exec -it home_dev_php bash
 }
 
 function show_help() {
@@ -74,6 +84,15 @@ case "$1" in
     ;;
     build)
         build
+        exit
+    ;;
+    dc)
+        shift
+        docker_compose $@
+        exit
+    ;;
+    ssh)
+        ssh
         exit
     ;;
 esac

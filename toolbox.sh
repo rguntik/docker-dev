@@ -43,7 +43,7 @@ function build() {
 }
 
 function docker_up() {
-    build
+#    build
     cd $HOME_DIR
     docker-compose -f docker-compose.yml up $@
 }
@@ -60,6 +60,20 @@ function ssh() {
     docker exec -it home_dev_php bash
 }
 
+function xd() {
+    LOCAL_IP=`hostname -I | cut -d' ' -f1`
+    DEBUG_PARAMS="
+     -dxdebug.remote_enable=1\
+     -dxdebug.remote_mode=req\
+     -dxdebug.remote_port=9000\
+     -dxdebug.remote_host=$LOCAL_IP\
+     -dxdebug.remote_connect_back=0"
+
+    docker exec  \
+ -e="PHP_IDE_CONFIG=serverName=dev.local" -e="XDEBUG_CONFIG=idekey=PHPSTORM"  \
+ home_dev_php php $DEBUG_PARAMS $@
+}
+
 function show_help() {
     printf "
 Usage:
@@ -72,6 +86,11 @@ commands:
 }
 
 case "$1" in
+    xd)
+        shift
+        xd $@
+        exit
+    ;;
     up)
         shift
         docker_up $@

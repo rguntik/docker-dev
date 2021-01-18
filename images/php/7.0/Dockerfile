@@ -1,4 +1,5 @@
-FROM php:7.4-fpm
+FROM php:7.0-fpm
+
 
 MAINTAINER Roman Huntik <rguntik@gmail.com>
 
@@ -12,12 +13,17 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libxml2-dev \
     procps\
-    cron\
     libpq-dev \
     libmcrypt-dev \
     postgresql-client \
     vim \
     mc \
+    cron \
+    libicu-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libxslt1-dev \
+    libfreetype6-dev \
     && apt-get autoremove -y -f \
     && apt-get clean -y
 
@@ -45,15 +51,6 @@ RUN if [ "$environment" = "development" ] ; then \
     pecl install xdebug && docker-php-ext-enable xdebug \
     ; fi
 
-# node
-RUN apt-get install -y gnupg2
-RUN rm -rf /var/lib/apt/lists/ && curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get install nodejs -y
-
-# Installing Yarn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && apt-get install -y yarn
 
 ADD php.ini /usr/local/etc/php/conf.d/custom.ini
 

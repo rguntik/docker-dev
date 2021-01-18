@@ -21,7 +21,8 @@ services:
     depends_on:
       - apache
     networks:
-      - static-network
+      static-network:
+        ipv4_address: ${NGINX_IP}
 
   php:
     container_name: home_dev_php

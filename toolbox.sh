@@ -5,6 +5,7 @@ cd ../sites
 export VOLUME_DIR=$(pwd)
 cd $HOME_DIR
 export HOST_IP="172.123.0.1"
+export NGINX_IP="172.123.0.11"
 
 cd $(dirname $0)
 export CURRENT_UID=$(id -u):$(id -g)

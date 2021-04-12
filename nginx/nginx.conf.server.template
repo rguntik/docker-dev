@@ -1,6 +1,8 @@
     server {
-        listen       80;
+        listen 443 ssl;
         server_name  ${SERVER_NAME};
+        ssl_certificate /etc/nginx/certs/server.crt;
+        ssl_certificate_key /etc/nginx/certs/server.key;
 
         location ~ \.(jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|mid|midi|wav|bmp|rtf|js)$ {
             root /var/www/html/${SITE_DIR};

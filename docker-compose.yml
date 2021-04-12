@@ -15,9 +15,11 @@ services:
     image: nginx:1.13
     ports:
       - 80:80
+      - 443:443
     volumes:
       - ${VOLUME_DIR}:/var/www/html
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl/:/etc/nginx/certs
     depends_on:
       - apache
     networks:

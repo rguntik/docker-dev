@@ -35,6 +35,10 @@ services:
     volumes:
       - ${VOLUME_DIR}:/var/www/html
     user: ${CURRENT_UID}
+    environment:
+      - XDEBUG_CONFIG=discover_client_host=true start_with_request=yes client_host=${LOCAL_IP:-localhost} xdebug.log=/tmp/xdebug.log
+      - XDEBUG_MODE=develop,debug
+      - XDEBUG_SESSION=1
     networks:
       - static-network
 

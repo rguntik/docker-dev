@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.2-fpm
 
 MAINTAINER Roman Huntik <rguntik@gmail.com>
 
@@ -17,7 +17,6 @@ RUN apt-get update && apt-get install -y \
     libmcrypt-dev \
     postgresql-client \
     vim \
-    mc \
     && apt-get autoremove -y -f \
     && apt-get clean -y
 
@@ -42,7 +41,7 @@ ENV COMPOSER_ALLOW_SUPERUSER 1 \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN if [ "$environment" = "development" ] ; then \
-    pecl install xdebug-3.1.5 && docker-php-ext-enable xdebug \
+    pecl install xdebug && docker-php-ext-enable xdebug \
     ; fi
 
 # node

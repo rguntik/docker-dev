@@ -6,6 +6,7 @@ export VOLUME_DIR=$(pwd)
 cd $HOME_DIR
 export HOST_IP="172.123.0.1"
 export NGINX_IP="172.123.0.11"
+export LOCAL_IP=`hostname -I | cut -d' ' -f1`
 
 cd $(dirname $0)
 export CURRENT_UID=$(id -u):$(id -g)
@@ -62,7 +63,6 @@ function ssh() {
 }
 
 function xd() {
-    LOCAL_IP=`hostname -I | cut -d' ' -f1`
     DEBUG_PARAMS="
      -dxdebug.remote_enable=1\
      -dxdebug.remote_mode=req\

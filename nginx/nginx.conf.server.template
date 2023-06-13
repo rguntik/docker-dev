@@ -5,7 +5,7 @@
         ssl_certificate_key /etc/nginx/certs/server.key;
 
         location ~ \.(jpg|jpeg|gif|png|ico|css|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|txt|tar|mid|midi|wav|bmp|rtf|js)$ {
-            root /var/www/html/${SITE_DIR};
+            root /var/www/html/${SITE_DIR}/public;
         }
 
         location ~ /\.ht {

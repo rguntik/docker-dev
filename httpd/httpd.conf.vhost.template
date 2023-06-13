@@ -1,5 +1,17 @@
 <VirtualHost *:80>
   ServerName ${SERVER_NAME}
-  DocumentRoot "/var/www/html/${SITE_DIR}"
+  DocumentRoot "/var/www/html/${SITE_DIR}/public"
+  <Directory /var/www/html/${SITE_DIR}/public>
+    AllowOverride None
+    Order Allow,Deny
+    Allow from All
+
+    <IfModule mod_rewrite.c>
+      Options -MultiViews
+      RewriteEngine On
+      RewriteCond %{REQUEST_FILENAME} !-f
+      RewriteRule ^(.*)$ index.php [QSA,L]
+    </IfModule>
+  </Directory>
 </VirtualHost>
 

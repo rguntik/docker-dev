@@ -44,6 +44,10 @@ RUN if [ "$environment" = "development" ] ; then \
     pecl install xdebug && docker-php-ext-enable xdebug \
     ; fi
 
+#symfony
+RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
+RUN apt install symfony-cli
+
 # node
 RUN apt-get install -y gnupg2
 RUN rm -rf /var/lib/apt/lists/ && curl -sL https://deb.nodesource.com/setup_10.x | bash -

@@ -26,6 +26,9 @@ function build() {
     echo "$HOST_IP dev.loc" >>"$HOME_DIR/hosts"
 
     for dir in $(ls -d */ | cut -f1 -d'/'); do
+        if [ "$dir" == "public" ]; then
+          continue
+        fi
         export SERVER_NAME="$dir.dev.loc"
         export SITE_DIR=$dir
 
@@ -38,14 +41,19 @@ function build() {
 
     cat "$HOME_DIR/hosts" | sudo tee /etc/hosts
     echo "$HOST_IP dev.loc:8080" >>"$HOME_DIR/hosts"
-    cat "$HOME_DIR/hosts" | grep $HOST_IP | awk '{print "http://" $2}' >"$VOLUME_DIR/hostList.txt"
+
+    if [ ! -d "$VOLUME_DIR/public" ]; then
+      mkdir "$VOLUME_DIR/public"
+      echo "Directory created: $directory"
+    fi
+
+    cat "$HOME_DIR/hosts" | grep $HOST_IP | awk '{print "http://" $2}' >"$VOLUME_DIR/public/hostList.txt"
     rm "$HOME_DIR/hosts"
-    rm "$VOLUME_DIR/index.php"
-    cp "$HOME_DIR/index.php" "$VOLUME_DIR/index.php"
+    rm "$VOLUME_DIR/public/index.php"
+    cp "$HOME_DIR/index.php" "$VOLUME_DIR/public/index.php"
 }
 
 function docker_up() {
-#    build
     cd $HOME_DIR
     docker-compose -f docker-compose.yml up $@
 }

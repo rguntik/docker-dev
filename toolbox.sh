@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 
-export HOME_DIR=$(pwd)
-cd ../sites
-export VOLUME_DIR=$(pwd)
-cd $HOME_DIR
-export HOST_IP="172.123.0.1"
-export NGINX_IP="172.123.0.11"
-export LOCAL_IP=`hostname -I | cut -d' ' -f1`
+export HOME_DIR=$(dirname $(readlink -f "$0"))
+export VOLUME_DIR=$(dirname "$HOME_DIR")/sites
 
-cd $(dirname $0)
+export LOCAL_IP=`hostname -I | cut -d' ' -f1`
 export CURRENT_UID=$(id -u):$(id -g)
+
+cd $HOME_DIR
 
 # Export the vars in .env into your shell:
 export $(egrep -v '^#' .env | xargs)
+
 
 function build() {
     cd $VOLUME_DIR
@@ -121,6 +119,11 @@ case "$1" in
     ;;
     ssh)
         ssh
+        exit
+    ;;
+    symfony)
+        shift
+        docker exec -uroot home_dev_php symfony $@
         exit
     ;;
 esac

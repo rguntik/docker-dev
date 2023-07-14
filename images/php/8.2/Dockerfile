@@ -50,7 +50,7 @@ RUN apt install symfony-cli
 
 # node
 RUN apt-get install -y gnupg2
-RUN rm -rf /var/lib/apt/lists/ && curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN rm -rf /var/lib/apt/lists/ && curl -sL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install nodejs -y
 
 # Installing Yarn

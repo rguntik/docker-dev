@@ -3,14 +3,14 @@
 export HOME_DIR=$(dirname $(readlink -f "$0"))
 export VOLUME_DIR=$(dirname "$HOME_DIR")/sites
 
-export LOCAL_IP=`hostname -I | cut -d' ' -f1`
+export LOCAL_IP=$(ipconfig getifaddr en0)
+#export LOCAL_IP=`hostname -I | cut -d' ' -f1` # for linux
 export CURRENT_UID=$(id -u):$(id -g)
 
 cd $HOME_DIR
 
 # Export the vars in .env into your shell:
 export $(egrep -v '^#' .env | xargs)
-
 
 function build() {
     cd $VOLUME_DIR

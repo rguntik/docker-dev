@@ -8,8 +8,6 @@ services:
       - ./httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf
     depends_on:
       - php
-    networks:
-      - static-network
 
   nginx:
     image: nginx:1.13
@@ -22,9 +20,6 @@ services:
       - ./sslNew/:/etc/nginx/certs
     depends_on:
       - apache
-    networks:
-      static-network:
-        ipv4_address: ${NGINX_IP}
 
   php:
     container_name: home_dev_php
@@ -39,11 +34,9 @@ services:
       - XDEBUG_CONFIG=discover_client_host=true start_with_request=yes client_host=${LOCAL_IP:-localhost} xdebug.log=/tmp/xdebug.log
       - XDEBUG_MODE=develop,debug
       - XDEBUG_SESSION=1
-    networks:
-      - static-network
 
   rg_mysql:
-    image: mysql:5.7
+    image: biarms/mysql:5.7
     ports:
       - 3347:3306
     depends_on:
@@ -55,8 +48,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ./data/mysql:/var/lib/mysql
-    networks:
-      - static-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -68,11 +59,4 @@ services:
       - rg_mysql:mysql_db_server
     ports:
       - 8080:80
-    networks:
-      - static-network
 
-networks:
-  static-network:
-    ipam:
-      config:
-        - subnet: 172.123.0.0/16
